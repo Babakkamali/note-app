@@ -16,6 +16,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getAllNotes() {
         viewModelScope.launch {
+
             noteRepo.getAllNotesFromRoom().collect { response ->
                 notesModel = response
             }
