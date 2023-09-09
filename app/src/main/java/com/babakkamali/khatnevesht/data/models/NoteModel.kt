@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class NoteModel (
     @PrimaryKey(autoGenerate = true)
     var id: Int,
-    var serverId: Int,
+//    var serverId: Int,
     var title:String,
     var notes:String
 )
