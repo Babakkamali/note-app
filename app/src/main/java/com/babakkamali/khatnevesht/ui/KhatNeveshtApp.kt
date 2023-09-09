@@ -19,6 +19,7 @@ import com.babakkamali.khatnevesht.ui.presentation.loginScreen.LoginScreen
 import com.babakkamali.khatnevesht.ui.presentation.loginScreen.LoginViewModel
 import com.babakkamali.khatnevesht.ui.presentation.loginScreen.LoginViewModelFactory
 import com.babakkamali.khatnevesht.ui.presentation.updateNoteScreen.UpdateNoteScreen
+import com.babakkamali.khatnevesht.utils.PreferenceUtils
 
 @Composable
 fun KhatNeveshtApp(
@@ -71,7 +72,17 @@ fun KhatNeveshtApp(
             AddNoteScreen(navigateBack = { navController.popBackStack() })
         }
         composable(KhatNeveshtAppScreens.About.name) {
-            AboutScreen(navigateBack = { navController.popBackStack() })
+            AboutScreen(navigateBack = { navController.popBackStack() },
+                onLogout = {
+                    PreferenceUtils.removeToken(context)
+                    navigateToLogin(navController)
+                }
+            )
         }
+    }
+}
+fun navigateToLogin(navController: NavHostController) {
+    navController.navigate(KhatNeveshtAppScreens.Login.name) {
+        popUpTo(KhatNeveshtAppScreens.Home.name) { inclusive = true }
     }
 }

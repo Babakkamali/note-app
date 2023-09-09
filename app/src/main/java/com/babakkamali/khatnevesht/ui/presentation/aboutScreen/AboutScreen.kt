@@ -26,11 +26,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import com.babakkamali.khatnevesht.R
+import com.babakkamali.khatnevesht.ui.KhatNeveshtAppScreens
+import com.babakkamali.khatnevesht.utils.PreferenceUtils
 
 
 @Composable
 fun AboutScreen(
     navigateBack: () -> Unit,
+    onLogout: () -> Unit
 ) {
     val context = LocalContext.current
     val intentGithub = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/babakkamali/note-app"))
@@ -112,6 +115,26 @@ fun AboutScreen(
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center
                         )
+                }
+                Spacer(modifier = Modifier.height(30.dp))
+                Button(
+                    onClick = onLogout,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorResource(id = R.color.logout_btn), // or any other color you prefer
+                        contentColor = Color.White
+                    ),
+                    shape = RoundedCornerShape(20.dp)
+                ) {
+                    Text(
+                        text = "Logout",
+                        fontSize = 24.sp,
+                        fontFamily = FontFamily(Font(R.font.playfair_display_regular)),
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center
+                    )
                 }
                 Spacer(modifier = Modifier.height(20.dp))
             }
