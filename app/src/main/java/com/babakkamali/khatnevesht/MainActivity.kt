@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import com.babakkamali.khatnevesht.ui.KhatNeveshtApp
 import com.babakkamali.khatnevesht.ui.KhatNeveshtAppScreens
 import com.babakkamali.khatnevesht.ui.theme.KhatneveshtTheme
+import com.babakkamali.khatnevesht.utils.ContextProvider
 
 class MainActivity : ComponentActivity() {
     private lateinit var navController: NavHostController
@@ -26,14 +28,15 @@ class MainActivity : ComponentActivity() {
             navController.navigate(KhatNeveshtAppScreens.Login.name) {
                 popUpTo(KhatNeveshtAppScreens.Home.name) { inclusive = true }
             }
+            Toast.makeText(applicationContext,"You session has been expired, please login to continue.",Toast.LENGTH_LONG).show()
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ContextProvider.init(applicationContext)
         setContent {
             KhatneveshtTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

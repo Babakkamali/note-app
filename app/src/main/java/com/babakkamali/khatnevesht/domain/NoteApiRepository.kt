@@ -1,10 +1,10 @@
 package com.babakkamali.khatnevesht.domain
 
-import com.babakkamali.khatnevesht.data.api.ApiService
+import com.babakkamali.khatnevesht.data.api.ApiClient
 import com.babakkamali.khatnevesht.data.models.apiCall.CreateNoteRequest
 
-class NoteApiRepository(private val apiService: ApiService) {
-
+class NoteApiRepository() {
+    private val apiService = ApiClient.apiService
     suspend fun getAllNotes() = apiService.getAllNotes()
 
     suspend fun createNote(request: CreateNoteRequest) = apiService.createNote(request)
