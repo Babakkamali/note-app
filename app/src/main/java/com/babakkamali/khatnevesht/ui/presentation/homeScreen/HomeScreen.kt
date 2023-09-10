@@ -102,7 +102,7 @@ fun NoteSwappable(
     val dismissState = rememberDismissState(
         confirmStateChange = {
             if (it == DismissedToEnd)
-                viewModel.deleteNote(noteModel)
+                viewModel.softDelete(noteModel)
             it != DismissedToEnd
         }
     )

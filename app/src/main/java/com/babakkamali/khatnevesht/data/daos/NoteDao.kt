@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NoteDao {
-    @Query("SELECT * FROM noteModel ORDER BY id ASC")
+    @Query("SELECT * FROM noteModel WHERE isDeleted = 0 ORDER BY id ASC")
     fun getAllNotes(): Flow<List<NoteModel>>
 
     @Query("SELECT * FROM noteModel WHERE id = :noteId")
@@ -20,4 +20,8 @@ interface NoteDao {
 
     @Delete
     suspend fun deleteNote(noteModel: NoteModel)
+
+    @Query("UPDATE noteModel SET isDeleted = 1 WHERE id = :noteId")
+    suspend fun softDeleteNote(noteId: Int)
+
 }

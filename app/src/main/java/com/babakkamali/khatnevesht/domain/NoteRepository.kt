@@ -19,4 +19,5 @@ class NoteRepository(application: Application) {
     suspend fun insertNoteToRoom(noteModel: NoteModel) = noteDao.insertNote(noteModel)
     suspend fun updateNoteInRoom(noteModel: NoteModel) = noteDao.updateNote(noteModel)
     suspend fun deleteNoteFromRoom(noteModel: NoteModel) = noteDao.deleteNote(noteModel)
+    suspend fun softDeleteNoteFromRoom(noteId: Int) = noteDao.softDeleteNote(noteId)
 }

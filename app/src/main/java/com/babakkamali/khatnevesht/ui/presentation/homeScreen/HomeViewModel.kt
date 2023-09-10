@@ -16,7 +16,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getAllNotes() {
         viewModelScope.launch {
-
             noteRepo.getAllNotesFromRoom().collect { response ->
                 notesModel = response
             }
@@ -26,6 +25,12 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     fun deleteNote(noteModel: NoteModel) {
         viewModelScope.launch {
             noteRepo.deleteNoteFromRoom(noteModel)
+        }
+    }
+
+    fun softDelete(noteModel: NoteModel) {
+        viewModelScope.launch {
+            noteRepo.softDeleteNoteFromRoom(noteModel.id)
         }
     }
 }
