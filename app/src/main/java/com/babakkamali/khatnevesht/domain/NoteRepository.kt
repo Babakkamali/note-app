@@ -17,6 +17,7 @@ class NoteRepository(application: Application) {
     }
 
     fun getAllNotesFromRoom(): Flow<List<NoteModel>> = noteDao.getAllNotes()
+    fun getAllNotesWithSoftDeleteFromRoom(): List<NoteModel> = noteDao.getAllNotesWithSoftDelete()
     fun getNoteByIdFromRoom(noteId: Int): Flow<NoteModel> = noteDao.getNoteById(noteId)
     suspend fun insertNoteToRoom(noteModel: NoteModel) = noteDao.insertNote(noteModel)
     suspend fun updateNoteInRoom(noteModel: NoteModel) = noteDao.updateNote(noteModel)

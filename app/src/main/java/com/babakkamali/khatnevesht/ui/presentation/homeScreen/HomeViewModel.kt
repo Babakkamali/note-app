@@ -7,12 +7,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.babakkamali.khatnevesht.data.daos.NoteDao
+import com.babakkamali.khatnevesht.data.database.NoteDatabase
 import com.babakkamali.khatnevesht.data.models.NoteModel
 import com.babakkamali.khatnevesht.data.models.apiCall.CreateNoteRequest
 import com.babakkamali.khatnevesht.domain.NoteApiRepository
 import com.babakkamali.khatnevesht.domain.NoteRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import org.json.JSONArray
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -42,6 +46,9 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun syncWithServer() {
+        val noteDatabase = NoteDatabase.getInstance(getApplication())
+        val noteDao = noteDatabase.noteDao()
+        printAllNotesAsJson(noteDao)
         viewModelScope.launch {
             Log.d("SYNC", "Starting sync with server")
 
@@ -52,7 +59,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             val serverDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
 
             // Fetch all local notes
-            val localNotes = noteRepo.getAllNotesFromRoom().first()
+            val localNotes = noteRepo.getAllNotesWithSoftDeleteFromRoom()
             Log.d("SYNC", "Fetched ${localNotes.size} notes from local database")
 
             // Handle additions and updates
@@ -87,7 +94,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
             // Handle new notes from server and deletions
             val localNoteServerIds = localNotes.map { it.serverId }.toSet()
-            val softDeletedIds = localNotes.filter { it.isDeleted }.map { it.serverId }.toSet()
+            val softDeletedIds = localNotes.filter { it.isDeleted == 1}.map { it.serverId }.toSet()
 
             for (serverNote in serverNotes) {
                 Log.e("SYNC","serverNote.id="+serverNote.id+"localNoteServerIds.contains="+localNoteServerIds.contains(serverNote.id)+"oftDeletedIds.contains="+!softDeletedIds.contains(serverNote.id))
@@ -109,9 +116,9 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             // Handle deletions
             val serverNoteIds = serverNotes.map { it.id }.toSet()
             for (localNote in localNotes) {
-                if (!serverNoteIds.contains(localNote.serverId) || localNote.isDeleted) {
+                if (!serverNoteIds.contains(localNote.serverId) || localNote.isDeleted == 1) {
                     // Note was deleted on the server or soft-deleted locally
-                    if (localNote.isDeleted) {
+                    if (localNote.isDeleted == 1) {
                         noteApiRepo.deleteNote(localNote.serverId)
                         Log.d("SYNC", "Deleted note on server with ID: ${localNote.serverId}")
                     }
@@ -124,5 +131,24 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun printAllNotesAsJson(noteDao: NoteDao) {
+        val notes = noteDao.getAllNotesWithSoftDelete()
+        val jsonArray = JSONArray()
 
+        for (note in notes) {
+            val jsonObject = JSONObject().apply {
+                put("id", note.id)
+                put("title", note.title)
+                put("notes", note.notes)
+                put("createdAt", note.createdAt)
+                put("updatedAt", note.updatedAt)
+                put("serverId", note.serverId)
+                put("isDeleted", note.isDeleted)
+
+            }
+            jsonArray.put(jsonObject)
+        }
+
+        println(jsonArray.toString())
+    }
 }

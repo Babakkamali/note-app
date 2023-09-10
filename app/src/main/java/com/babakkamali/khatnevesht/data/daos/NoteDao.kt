@@ -7,6 +7,10 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NoteDao {
+
+    @Query("SELECT * FROM noteModel")
+    fun getAllNotesWithSoftDelete(): List<NoteModel>
+
     @Query("SELECT * FROM noteModel WHERE isDeleted = 0 ORDER BY id ASC")
     fun getAllNotes(): Flow<List<NoteModel>>
 

@@ -16,5 +16,5 @@ data class NoteModel (
     var createdAt: Date? = null,
     var updatedAt: Date? = null,
     var serverId: Int = 0,
-    var isDeleted: Boolean = false
+    var isDeleted: Int = 0
 )
