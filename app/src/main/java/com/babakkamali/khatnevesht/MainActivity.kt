@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
             navController.navigate(KhatNeveshtAppScreens.Login.name) {
                 popUpTo(KhatNeveshtAppScreens.Home.name) { inclusive = true }
             }
-            Toast.makeText(applicationContext,"You session has been expired, please login to continue.",Toast.LENGTH_LONG).show()
+            Toast.makeText(applicationContext, getString(R.string.session_expired),Toast.LENGTH_LONG).show()
         }
     }
 

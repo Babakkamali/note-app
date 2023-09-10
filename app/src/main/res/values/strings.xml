@@ -2,5 +2,6 @@
     <string name="app_name">KhatNevesht</string>
     <string name="note">Notes</string>
     <string name="about">About</string>
-    <string name="about_me">This is my university project for a simple android app based on kotlin </string>
+    <string name="about_me">This is my university project for a simple android app based on kotlin and jetpack compose </string>
+    <string name="session_expired">You session has been expired, please login to continue.</string>
 </resources>
