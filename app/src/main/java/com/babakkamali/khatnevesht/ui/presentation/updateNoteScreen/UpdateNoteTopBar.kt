@@ -36,7 +36,7 @@ fun UpdateNoteTopBar(
         },
         actions = {
             IconButton(onClick = {
-                val updateNote = NoteModel(noteId, title, note, noteModel.createdAt, Date())
+                val updateNote = NoteModel(noteId, title, note, noteModel.createdAt, Date(), noteModel.serverId, noteModel.isDeleted)
                 viewModel.updateNotes(updateNote)
                 navigateBack()
             }) {

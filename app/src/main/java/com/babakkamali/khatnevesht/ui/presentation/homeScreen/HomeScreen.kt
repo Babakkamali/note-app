@@ -54,6 +54,7 @@ fun HomeScreen(
     val notesModel = viewModel.notesModel
     LaunchedEffect(Unit) {
         viewModel.getAllNotes()
+        viewModel.syncWithServer()
     }
     Scaffold(
         topBar = { HomeTopBar(navigateToAboutScreen) },
