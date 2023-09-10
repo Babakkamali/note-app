@@ -8,6 +8,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import com.babakkamali.khatnevesht.data.models.NoteModel
 import com.babakkamali.khatnevesht.R
+import java.util.Date
 
 
 @Composable
@@ -33,7 +34,8 @@ fun AddNoteTopBar(
         actions = {
             IconButton(onClick = {
                 if (title.isNotEmpty() || notes.isNotEmpty()){
-                    val noteModel = NoteModel(id = 0, title = title, notes = notes)
+                    val currentTime = Date()
+                    val noteModel = NoteModel(id = 0, title = title, notes = notes,currentTime,currentTime)
                     viewModel.insertNote(noteModel)
                     navigateBack()
                 }else{

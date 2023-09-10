@@ -9,7 +9,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import com.babakkamali.khatnevesht.R
+import com.babakkamali.khatnevesht.data.daos.NoteDao
 import com.babakkamali.khatnevesht.data.models.NoteModel
+import java.util.Date
 
 @Composable
 fun UpdateNoteTopBar(
@@ -19,6 +21,7 @@ fun UpdateNoteTopBar(
     title: String,
     note: String,
 ) {
+    val noteModel = viewModel.noteModel
     CenterAlignedTopAppBar(
         title = { Text(
             text = title,
@@ -33,7 +36,7 @@ fun UpdateNoteTopBar(
         },
         actions = {
             IconButton(onClick = {
-                val updateNote = NoteModel(noteId, title, note)
+                val updateNote = NoteModel(noteId, title, note, noteModel.createdAt, Date())
                 viewModel.updateNotes(updateNote)
                 navigateBack()
             }) {
