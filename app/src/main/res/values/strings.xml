@@ -4,4 +4,5 @@
     <string name="about">About</string>
     <string name="about_me">This is my university project for a simple android app based on kotlin and jetpack compose </string>
     <string name="session_expired">You session has been expired, please login to continue.</string>
+    <string name="your_notes_will_appear_here">Your notes will appear here</string>
 </resources>

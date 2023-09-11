@@ -2,6 +2,7 @@ package com.babakkamali.khatnevesht.ui.presentation.homeScreen
 
 import  com.babakkamali.khatnevesht.R
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.lazy.LazyColumn
@@ -36,12 +37,16 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
+import com.babakkamali.khatnevesht.ui.presentation.loginScreen.LoginUIState
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -52,8 +57,10 @@ fun HomeScreen(
 ) {
     val viewModel: HomeViewModel = viewModel()
     val notesModel = viewModel.notesModel
+    val uiState by viewModel.uiState.observeAsState()
+    val state = viewModel.uiState.value
+    val context = LocalContext.current
     LaunchedEffect(Unit) {
-        viewModel.getAllNotes()
         viewModel.syncWithServer()
     }
     Scaffold(
@@ -79,6 +86,21 @@ fun HomeScreen(
                     .fillMaxSize()
                     .padding(0.dp, 20.dp, 0.dp, 0.dp)
             ) {
+                when (state){
+                    is HomeScreenState.Loading -> {
+                        item {
+                            Box(modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 16.dp), contentAlignment = Alignment.Center) {
+                                CircularProgressIndicator()
+                            }
+                        }
+
+                    }
+                    is HomeScreenState.Error -> {
+                        val errorMessage = (state as HomeScreenState.Error).message
+                        Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()                    }
+                }
                 if (notesModel.isNotEmpty()) {
                     items(notesModel) { noteModel ->
                         NoteSwappable(noteModel, viewModel, navigateToUpdateNoteScreen)
@@ -155,7 +177,7 @@ fun ShowNoNotes() {
             modifier = Modifier.fillMaxWidth(),
             alignment = Alignment.Center
         )
-        Text(text = "Your notes will show here",
+        Text(text = stringResource(R.string.your_notes_will_appear_here),
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center
         )
