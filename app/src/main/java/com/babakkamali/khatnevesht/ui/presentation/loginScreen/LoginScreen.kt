@@ -3,6 +3,7 @@ package com.babakkamali.khatnevesht.ui.presentation.loginScreen
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -68,12 +69,10 @@ fun LoginScreen(
                     .fillMaxSize()
                     .padding(16.dp)
             ) {
+                LoadingIndicator(uiState = uiState)
                 when (uiState) {
                     is LoginUIState.PhoneNumberSent -> {
                         isPhoneNumberEntered.value = true
-                    }
-                    is LoginUIState.Loading -> {
-                        CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
                     }
                     is LoginUIState.Error -> {
                         Toast.makeText(context, (uiState as LoginUIState.Error).message, Toast.LENGTH_SHORT).show()
@@ -128,7 +127,11 @@ fun LoginScreen(
                         Spacer(modifier = Modifier.height(16.dp))
 
                         Button(onClick = {
-                            viewModel.sendPhoneNumber("09" + phoneNumberState.value)  // Call the method in the ViewModel
+                            if (phoneNumberState.value.isNotEmpty() && phoneNumberState.value.length == 9) {
+                                viewModel.sendPhoneNumber("09" + phoneNumberState.value)  // Call the method in the ViewModel
+                            } else {
+                                Toast.makeText(context, "Please enter a valid phone number.", Toast.LENGTH_SHORT).show()
+                            }
                         }) {
                             Text("Send SMS Token")
                         }
@@ -166,11 +169,11 @@ fun LoginScreen(
                         Spacer(modifier = Modifier.height(16.dp))
 
                         Button(onClick = {
-                            Log.e("MyTag","Login Button clicked")
-                            viewModel.verifyToken(
-                                "09" + phoneNumberState.value,
-                                tokenState.value
-                            )  // Call the method in the ViewModel
+                            if (tokenState.value.isNotEmpty() && tokenState.value.length == 6) { // Assuming token length of 6
+                                viewModel.verifyToken("09" + phoneNumberState.value, tokenState.value)  // Call the method in the ViewModel
+                            } else {
+                                Toast.makeText(context, "Please enter a valid token.", Toast.LENGTH_SHORT).show()
+                            }
                         }) {
                             Text("Login")
                         }
@@ -179,4 +182,17 @@ fun LoginScreen(
             }
         }
     )
+}
+@Composable
+fun LoadingIndicator(uiState: LoginUIState?) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp), // Ensure this height matches the Spacer's height
+        contentAlignment = Alignment.Center
+    ) {
+        if (uiState is LoginUIState.Loading) {
+            CircularProgressIndicator()
+        }
+    }
 }
