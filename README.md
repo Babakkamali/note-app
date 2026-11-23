@@ -56,6 +56,7 @@ Sync runs when the home screen opens and after every delete.
 
 1. Open the project in Android Studio (compile SDK 33, min SDK 27).
 2. Copy `local.properties.example` to `local.properties` and set `STAGING_URL` / `PRODUCTION_URL` to your note-api address.
+   On the Android emulator, with note-api running on the same machine, that's `STAGING_URL="http://10.0.2.2:8000/"`. Keep the quotes and the trailing slash.
 3. Start [note-api](https://github.com/Babakkamali/note-api) with Docker Compose, then run the app.
 
 ## What I'd do differently today
