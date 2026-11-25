@@ -58,11 +58,3 @@ Sync runs when the home screen opens and after every delete.
 2. Copy `local.properties.example` to `local.properties` and set `STAGING_URL` / `PRODUCTION_URL` to your note-api address.
    On the Android emulator, with note-api running on the same machine, that's `STAGING_URL="http://10.0.2.2:8000/"`. Keep the quotes and the trailing slash.
 3. Start [note-api](https://github.com/Babakkamali/note-api) with Docker Compose, then run the app.
-
-## What I'd do differently today
-
-- Run sync in WorkManager with retries and network constraints, so it no longer depends on a screen being open.
-- Last-write-wins trusts device clocks and can silently drop an edit. Versions or timestamps assigned by the server would be safer.
-- The JWT is kept in plain SharedPreferences. EncryptedSharedPreferences, or DataStore backed by the Keystore, would protect it.
-- Room is opened with `allowMainThreadQueries()`. All database work should run on background dispatchers.
-- Add Hilt for dependency injection and unit tests for the sync logic, which is the riskiest part of the app.
